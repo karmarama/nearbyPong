@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "904805274186",
+    "firebase_url": "https://nearbypong.firebaseio.com",
+    "project_id": "nearbypong",
+    "storage_bucket": "nearbypong.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904805274186:android:45c715a82401dd44",
+        "android_client_info": {
+          "package_name": "agency.nice.nearbypong"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904805274186-hoc88s15grepeag8bc46q52k46s10ruc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "agency.nice.nearbypong",
+            "certificate_hash": "7a0c7482870309bb51c158f19ffa63354a01fb9c"
+          }
+        },
+        {
+          "client_id": "904805274186-btd46hej58ag9r2pii0nb55oe2j4o6ef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQN2u1zMTa17dj7m0y3Im3x6rlaCgWTaI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904805274186-btd46hej58ag9r2pii0nb55oe2j4o6ef.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

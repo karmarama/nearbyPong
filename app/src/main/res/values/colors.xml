@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#0000F2CE</color>
+    <color name="transparent_black">#00000000</color>
+    <color name="colorPrimary">#5500F2CE</color>
+    <color name="colorPrimaryDark">#09182b</color>
+    <color name="colorAccent">#00F2CE</color>
+    <color name="bg_button">#0F2D42</color>
+    <color name="log_verbose">#FFFFFF</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="green_timeout">#3300fad4</color>
+    <color name="orange">#ffa114</color>
+    <color name="cyan">#00fad4</color>
+    <color name="blue">#09182b</color>
+    <color name="blue_transparent">#0009182b</color>
+
+</resources>

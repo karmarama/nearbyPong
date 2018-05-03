@@ -1,0 +1,19 @@
+<resources>
+
+    <declare-styleable name="Button">
+        <attr name="borderSides">
+            <flag name="left" value="1" />
+            <flag name="right" value="2" />
+            <flag name="top" value="3" />
+            <flag name="bottom" value="4" />
+        </attr>
+        <attr name="text" format="reference" />
+
+    </declare-styleable>
+
+    <declare-styleable name="RadarView">
+        <attr name="drawHeight" format="float" />
+        <attr name="drawWidth" format="float" />
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_bar">10dp</dimen>
+    <dimen name="layout_margin">32dp</dimen>
+    <dimen name="header">30sp</dimen>
+    <dimen name="button_text_size">20sp</dimen>
+    <dimen name="button_text_press_size">18sp</dimen>
+    <dimen name="button_margin">8dp</dimen>
+
+    <dimen name="bar_height">180dp</dimen>
+    <dimen name="ball_size">60dp</dimen>
+    <dimen name="ball_inside_size">36dp</dimen>
+    <dimen name="text_info_large_size">20sp</dimen>
+    <dimen name="text_info_xlarge_size">30sp</dimen>
+    <dimen name="home_button_top_margin">24dp</dimen>
+    <dimen name="line_animation_height">301dp</dimen>
+    <dimen name="line_animation_width">2dp</dimen>
+
+</resources>

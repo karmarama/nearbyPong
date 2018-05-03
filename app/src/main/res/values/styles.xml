@@ -1,0 +1,53 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:fontFamily">@font/orbitron</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <style name="Game" />
+
+    <style name="Game.Score">
+        <item name="android:textSize">50sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Text.Header.Glow">
+        <item name="android:shadowColor">#00fad4</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">8</item>
+        <item name="android:letterSpacing">0.11</item>
+    </style>
+
+    <style name="Text"></style>
+
+    <style name="Text.Header">
+        <item name="android:textSize">36sp</item>
+    </style>
+
+    <style name="Text.Header.Glow.Scores">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Text.Button">
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.5</item>
+    </style>
+
+</resources>

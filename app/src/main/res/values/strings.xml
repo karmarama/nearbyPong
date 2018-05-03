@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">NearbyPong</string>
+    <string name="app_name_first">NEARBY</string>
+    <string name="app_name_second">Pong</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="custom_license_title">Licenses</string>
+    <string name="error_missing_permissions">Cannot start without required permissions</string>
+    <string name="log_connected">Connected to %s</string>
+    <string name="log_disconnected">Disconnected from %s</string>
+    <string name="text_timeout">Timeout\nreached</string>
+    <string name="button_play">PLAY</string>
+    <string name="button_scores">SCORES</string>
+    <string name="button_play_again">PLAY AGAIN</string>
+    <string name="button_retry">RETRY</string>
+    <string name="button_quit">QUIT</string>
+    <string name="result_description_text_winner">You have won</string>
+    <string name="result_description_text_loser">You have lost</string>
+    <string name="game_connecting_text">Looking\nfor a friend</string>
+    <string name="game_setting_side_text">Setting fields for players...</string>
+    <string name="game_loser_flag">Loser</string>
+    <string name="player_one">My score</string>
+    <string name="player_two">Opponent</string>
+    <string name="result_score"> %1$s | %2$s </string>
+    <string name="title_scores">SCORES</string>
+
+</resources>

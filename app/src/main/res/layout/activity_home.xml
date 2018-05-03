@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="agency.nice.nearbypong.ui.game.HomeActivity">
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="@dimen/line_animation_width"
+            android:layout_height="@dimen/line_animation_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/title_scores"
+            style="@style/Text.Header.Glow.Scores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:text="@string/title_scores"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+
+        <ImageView
+            android:id="@+id/title_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/nearby"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/title_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/p"
+            app:layout_constraintLeft_toLeftOf="@+id/title_first"
+            app:layout_constraintTop_toBottomOf="@+id/title_first" />
+
+        <ImageView
+            android:id="@+id/title_gap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ball_hidden"
+            android:visibility="invisible"
+            app:layout_constraintLeft_toRightOf="@+id/title_second"
+            app:layout_constraintTop_toBottomOf="@+id/title_first" />
+
+        <ImageView
+            android:id="@+id/title_fourth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ng"
+            app:layout_constraintLeft_toRightOf="@+id/title_gap"
+            app:layout_constraintRight_toRightOf="@+id/title_first"
+            app:layout_constraintTop_toBottomOf="@+id/title_first" />
+
+
+        <agency.nice.nearbypong.widgets.Ball
+            android:id="@+id/ball"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/title_first"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <LinearLayout
+            android:id="@+id/linear_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_first">
+
+            <agency.nice.nearbypong.widgets.Button
+                android:id="@+id/play"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:borderSides="left|bottom"
+                app:text="@string/button_play" />
+
+            <agency.nice.nearbypong.widgets.Button
+                android:id="@+id/scores"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/home_button_top_margin"
+                app:borderSides="left|bottom"
+                app:text="@string/button_scores" />
+        </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listGames"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_scores"
+            tools:listitem="@layout/item_game" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
