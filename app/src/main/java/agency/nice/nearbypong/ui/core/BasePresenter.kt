@@ -10,8 +10,6 @@ open class BasePresenter<V : BaseMvp.BaseView> : BaseMvp.BasePresenter<V> {
     protected var view: V? = null
     val disposables = ListCompositeDisposable()
 
-    protected fun BasePresenter() {}
-
     override fun attachView(view: V) {
         this.view = view
     }

@@ -5,20 +5,20 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.Transformation
 
-
 /**
  * Created by fernando.moyano on 01/11/2017.
  */
+
+private const val MIN_SIZE: Int = 24
+
 class ResizeAnimation : Animation() {
 
-    private val MIN_SIZE: Int = 24
-    lateinit var view: View
-    var startHeight: Int = 0
-    var startWidth: Int = 0
-    var targetHeight: Int = -1
-    var targetWidth: Int = -1
-    var isIncreaseSize: Boolean = false
-
+    private lateinit var view: View
+    private var startHeight: Int = 0
+    private var startWidth: Int = 0
+    private var targetHeight: Int = -1
+    private var targetWidth: Int = -1
+    private var isIncreaseSize: Boolean = false
 
     fun init(view: View, targetHeight: Int, targetWidth: Int, isIncreaseSize: Boolean) {
         this.view = view

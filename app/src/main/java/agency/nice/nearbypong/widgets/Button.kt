@@ -3,12 +3,12 @@ package agency.nice.nearbypong.widgets
 import agency.nice.nearbypong.R
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
-import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.view_button.view.*
 
 
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.view_button.view.*
  */
 
 class Button @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     companion object {
@@ -38,8 +38,10 @@ class Button @JvmOverloads constructor(
         addView(customView)
 
         if (attrs != null) {
-            val a = context.obtainStyledAttributes(attrs,
-                    R.styleable.Button, 0, 0)
+            val a = context.obtainStyledAttributes(
+                attrs,
+                R.styleable.Button, 0, 0
+            )
             borders = a.getInteger(R.styleable.Button_borderSides, LEFT)
             text = a.getString(R.styleable.Button_text)
             a.recycle()
@@ -52,12 +54,18 @@ class Button @JvmOverloads constructor(
         when (event!!.getAction()) {
             MotionEvent.ACTION_DOWN -> {
                 setOpositeBorders(endColor, startColor, transparentColor)
-                buttonText.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.button_text_press_size))
+                buttonText.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(R.dimen.button_text_press_size)
+                )
                 this.invalidate()
             }
             MotionEvent.ACTION_UP -> {
                 setBorders(startColor, endColor, transparentColor)
-                buttonText.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.button_text_size))
+                buttonText.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimension(R.dimen.button_text_size)
+                )
                 this.invalidate()
             }
         }
@@ -71,29 +79,49 @@ class Button @JvmOverloads constructor(
         barBottom.background = null
         if (containsFlag(borders, LEFT)) {
             val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.BOTTOM_TOP,
-                    intArrayOf(ContextCompat.getColor(context, endColor), ContextCompat.getColor(context, startColor), ContextCompat.getColor(context, transparentColor)))
+                GradientDrawable.Orientation.BOTTOM_TOP,
+                intArrayOf(
+                    ContextCompat.getColor(context, endColor),
+                    ContextCompat.getColor(context, startColor),
+                    ContextCompat.getColor(context, transparentColor)
+                )
+            )
             barRight.background = gradientDrawable
         }
 
         if (containsFlag(borders, RIGHT)) {
             val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.BOTTOM_TOP,
-                    intArrayOf(ContextCompat.getColor(context, endColor), ContextCompat.getColor(context, startColor), ContextCompat.getColor(context, transparentColor)))
+                GradientDrawable.Orientation.BOTTOM_TOP,
+                intArrayOf(
+                    ContextCompat.getColor(context, endColor),
+                    ContextCompat.getColor(context, startColor),
+                    ContextCompat.getColor(context, transparentColor)
+                )
+            )
             barLeft.background = gradientDrawable
         }
 
         if (containsFlag(borders, BOTTOM)) {
             val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.RIGHT_LEFT,
-                    intArrayOf(ContextCompat.getColor(context, endColor), ContextCompat.getColor(context, startColor), ContextCompat.getColor(context, transparentColor)))
+                GradientDrawable.Orientation.RIGHT_LEFT,
+                intArrayOf(
+                    ContextCompat.getColor(context, endColor),
+                    ContextCompat.getColor(context, startColor),
+                    ContextCompat.getColor(context, transparentColor)
+                )
+            )
             barBottom.background = gradientDrawable
         }
 
         if (containsFlag(borders, TOP)) {
             val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.LEFT_RIGHT,
-                    intArrayOf(ContextCompat.getColor(context, endColor), ContextCompat.getColor(context, startColor), ContextCompat.getColor(context, transparentColor)))
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(
+                    ContextCompat.getColor(context, endColor),
+                    ContextCompat.getColor(context, startColor),
+                    ContextCompat.getColor(context, transparentColor)
+                )
+            )
             barTop.background = gradientDrawable
         }
     }
@@ -105,29 +133,49 @@ class Button @JvmOverloads constructor(
         barBottom.background = null
         if (containsFlag(borders, LEFT)) {
             val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.BOTTOM_TOP,
-                    intArrayOf(ContextCompat.getColor(context, startColor), ContextCompat.getColor(context, endColor), ContextCompat.getColor(context, transparentColor)))
+                GradientDrawable.Orientation.BOTTOM_TOP,
+                intArrayOf(
+                    ContextCompat.getColor(context, startColor),
+                    ContextCompat.getColor(context, endColor),
+                    ContextCompat.getColor(context, transparentColor)
+                )
+            )
             barLeft.background = gradientDrawable
         }
 
         if (containsFlag(borders, RIGHT)) {
             val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.BOTTOM_TOP,
-                    intArrayOf(ContextCompat.getColor(context, startColor), ContextCompat.getColor(context, endColor), ContextCompat.getColor(context, transparentColor)))
+                GradientDrawable.Orientation.BOTTOM_TOP,
+                intArrayOf(
+                    ContextCompat.getColor(context, startColor),
+                    ContextCompat.getColor(context, endColor),
+                    ContextCompat.getColor(context, transparentColor)
+                )
+            )
             barRight.background = gradientDrawable
         }
 
         if (containsFlag(borders, BOTTOM)) {
             val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.LEFT_RIGHT,
-                    intArrayOf(ContextCompat.getColor(context, startColor), ContextCompat.getColor(context, endColor), ContextCompat.getColor(context, transparentColor)))
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(
+                    ContextCompat.getColor(context, startColor),
+                    ContextCompat.getColor(context, endColor),
+                    ContextCompat.getColor(context, transparentColor)
+                )
+            )
             barBottom.background = gradientDrawable
         }
 
         if (containsFlag(borders, TOP)) {
             val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.LEFT_RIGHT,
-                    intArrayOf(ContextCompat.getColor(context, startColor), ContextCompat.getColor(context, endColor), ContextCompat.getColor(context, transparentColor)))
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(
+                    ContextCompat.getColor(context, startColor),
+                    ContextCompat.getColor(context, endColor),
+                    ContextCompat.getColor(context, transparentColor)
+                )
+            )
             barTop.background = gradientDrawable
         }
     }

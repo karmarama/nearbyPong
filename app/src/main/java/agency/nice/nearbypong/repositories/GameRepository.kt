@@ -19,5 +19,4 @@ class GameRepository(private val gameDao: GameDao) : DataSource<Game> {
             gameDao.save(game)
         }
     }
-
 }

@@ -7,40 +7,40 @@ import agency.nice.nearbypong.repositories.PlayerRepository
 import agency.nice.nearbypong.ui.core.BasePresenter
 import agency.nice.nearbypong.utils.Utils
 import android.util.Log
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.internal.disposables.ListCompositeDisposable
 
 /**
  * Created by fernando.moyano on 08/09/2017.
  */
-class GamePresenter(var gameRepository: GameRepository, var playerRepository: PlayerRepository) : BasePresenter<GameMvp.View>(), GameMvp.Presenter {
 
-    val TAG = "GamePresenter"
+val TAG = "GamePresenter"
+
+class GamePresenter(var gameRepository: GameRepository, var playerRepository: PlayerRepository) :
+    BasePresenter<GameMvp.View>(), GameMvp.Presenter {
 
     fun saveOrUpdatePlayer(player: Player) {
         disposables.add(playerRepository.save(player)
-                .compose(Utils.applySchedulersCompletable())
-                .subscribe({
-                    view!!.showSaved()
-                    Log.d(TAG, "saved Player")
-                })
-                { throwable ->
-                    Log.e(TAG, "Error saving Player ", throwable)
-                    view!!.showNotSaved()
-                })
+            .compose(Utils.applySchedulersCompletable())
+            .subscribe({
+                view!!.showSaved()
+                Log.d(TAG, "saved Player")
+            })
+            { throwable ->
+                Log.e(TAG, "Error saving Player ", throwable)
+                view!!.showNotSaved()
+            })
     }
 
     fun saveGame(game: Game, winner: Boolean) {
         disposables.add(gameRepository.save(game)
-                .compose(Utils.applySchedulersCompletable())
-                .subscribe({
-                    view!!.navigateToResultScreen(winner)
-                    Log.d(TAG, "Game saved")
-                })
-                { throwable ->
-                    Log.e(TAG, "Error saving Game", throwable)
-                    view!!.navigateToResultScreen(winner)
-                })
+            .compose(Utils.applySchedulersCompletable())
+            .subscribe({
+                view!!.navigateToResultScreen(winner)
+                Log.d(TAG, "Game saved")
+            })
+            { throwable ->
+                Log.e(TAG, "Error saving Game", throwable)
+                view!!.navigateToResultScreen(winner)
+            })
 
     }
 }

@@ -10,14 +10,14 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.provider.Settings
-import android.support.annotation.CallSuper
-import android.support.annotation.RequiresApi
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import androidx.annotation.CallSuper
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
@@ -31,13 +31,21 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by fernando.moyano on 07/09/2017.
  */
-abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+abstract class ConnectionsActivity : AppCompatActivity(),
+    GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     val TAG = "NearbyText"
     private val SERVICE_ID = "com.google.location.nearby.apps.walkietalkie.automatic.SERVICE_ID"
     private lateinit var state: State
     private lateinit var name: String
-    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)
+    private val REQUIRED_PERMISSIONS = arrayOf(
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_ADMIN,
+        Manifest.permission.ACCESS_WIFI_STATE,
+        Manifest.permission.CHANGE_WIFI_STATE,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.READ_PHONE_STATE
+    )
     private val REQUEST_CODE_REQUIRED_PERMISSIONS = 1
     private val TIMEOUT_STATUS = 15
     private val TIMEOUT_CONNECT_MILLIS: Long = 30000
@@ -101,14 +109,20 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
      */
     private val payloadCallback = object : PayloadCallback() {
         override fun onPayloadReceived(endpointId: String, payload: Payload) {
-            Log.d(TAG, String.format("onPayloadReceived(endpointId=%s, payload=%s)", endpointId, payload));
+            Log.d(
+                TAG,
+                String.format("onPayloadReceived(endpointId=%s, payload=%s)", endpointId, payload)
+            );
             onReceive(establishedConnections[endpointId], payload)
         }
 
         override fun onPayloadTransferUpdate(endpointId: String, update: PayloadTransferUpdate) {
-            Log.d(TAG,
-                    String.format(
-                            "onPayloadTransferUpdate(endpointId=%s, update=%s)", endpointId, update))
+            Log.d(
+                TAG,
+                String.format(
+                    "onPayloadTransferUpdate(endpointId=%s, update=%s)", endpointId, update
+                )
+            )
         }
     }
 
@@ -117,25 +131,34 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
      */
     private val connectionLifecycleCallback = object : ConnectionLifecycleCallback() {
         override fun onConnectionInitiated(endpointId: String, connectionInfo: ConnectionInfo) {
-            Log.d(TAG, String.format(
+            Log.d(
+                TAG, String.format(
                     "onConnectionInitiated(endpointId=%s, endpointName=%s)",
-                    endpointId, connectionInfo.endpointName))
+                    endpointId, connectionInfo.endpointName
+                )
+            )
             val endpoint = Endpoint(endpointId, connectionInfo.endpointName)
             pendingConnections.put(endpointId, endpoint)
             this@ConnectionsActivity.onConnectionInitiated(endpoint, connectionInfo)
         }
 
         override fun onConnectionResult(endpointId: String, result: ConnectionResolution) {
-            Log.d(TAG, String.format("onConnectionResponse(endpointId=%s, result=%s)", endpointId, result))
+            Log.d(
+                TAG,
+                String.format("onConnectionResponse(endpointId=%s, result=%s)", endpointId, result)
+            )
 
             // We're no longer connecting
             isConnecting = false
 
             if (!result.status.isSuccess) {
-                Log.d(TAG,
-                        String.format(
-                                "Connection failed. Received status %s.",
-                                statusToString(result.status)))
+                Log.d(
+                    TAG,
+                    String.format(
+                        "Connection failed. Received status %s.",
+                        statusToString(result.status)
+                    )
+                )
                 onConnectionFailed()
                 return
             }
@@ -189,27 +212,34 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
     }
 
     fun getDeviceId(): String {
-        return Settings.Secure.getString(contentResolver,
-                Settings.Secure.ANDROID_ID)
+        return Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
     }
 
     private fun statusToString(status: Status): String {
         return String.format(
-                Locale.US,
-                "[%d]%s",
-                status.statusCode,
-                if (status.statusMessage != null)
-                    status.statusMessage
-                else
-                    ConnectionsStatusCodes.getStatusCodeString(status.statusCode))
+            Locale.US,
+            "[%d]%s",
+            status.statusCode,
+            if (status.statusMessage != null)
+                status.statusMessage
+            else
+                ConnectionsStatusCodes.getStatusCodeString(status.statusCode)
+        )
     }
 
     /**
      * @return True if the app was granted all the permissions. False otherwise.
      */
-    fun hasPermissions(context: Context, vararg permissions: String): Boolean {
+    private fun hasPermissions(context: Context, vararg permissions: String): Boolean {
         for (permission in permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
                 return false
             }
         }
@@ -228,10 +258,10 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
     private fun createGoogleApiClient() {
         if (googleApiClient == null) {
             googleApiClient = GoogleApiClient.Builder(this)
-                    .addApi(Nearby.CONNECTIONS_API)
-                    .addConnectionCallbacks(this)
-                    .enableAutoManage(this, this)
-                    .build()
+                .addApi(Nearby.CONNECTIONS_API)
+                .addConnectionCallbacks(this)
+                .enableAutoManage(this, this)
+                .build()
         }
     }
 
@@ -270,10 +300,13 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
      * We are unable to connect to Nearby Connections' GoogleApiClient. Oh uh.
      */
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        Log.d(TAG,
-                String.format(
-                        "onConnectionFailed(%s)",
-                        statusToString(Status(connectionResult.errorCode))))
+        Log.d(
+            TAG,
+            String.format(
+                "onConnectionFailed(%s)",
+                statusToString(Status(connectionResult.errorCode))
+            )
+        )
     }
 
     /**
@@ -281,7 +314,8 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
      */
     @CallSuper
     override fun onRequestPermissionsResult(
-            requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
         if (requestCode == REQUEST_CODE_REQUIRED_PERMISSIONS) {
             for (grantResult in grantResults) {
                 if (grantResult == PackageManager.PERMISSION_DENIED) {
@@ -305,14 +339,15 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
         isAdvertising = true
         if (googleApiClient!!.isConnected) {
             Nearby.Connections.startAdvertising(
-                    googleApiClient,
-                    getName(),
-                    getServiceId(),
-                    connectionLifecycleCallback,
-                    AdvertisingOptions(STRATEGY))
-                    .setResultCallback({ result ->
-                        onResult(ConnectionCase.START_ADVERTISING, result.status)
-                    }, TIMEOUT_ADVERTISING_MILLIS, TimeUnit.MILLISECONDS)
+                googleApiClient,
+                getName(),
+                getServiceId(),
+                connectionLifecycleCallback,
+                AdvertisingOptions(STRATEGY)
+            )
+                .setResultCallback({ result ->
+                    onResult(ConnectionCase.START_ADVERTISING, result.status)
+                }, TIMEOUT_ADVERTISING_MILLIS, TimeUnit.MILLISECONDS)
         }
     }
 
@@ -342,8 +377,11 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
     private fun send(payload: Payload, endpoints: Set<String>) {
         if (googleApiClient!!.isConnected) {
             Nearby.Connections.sendPayload(googleApiClient, ArrayList(endpoints), payload)
-                    .setResultCallback(
-                            { status -> onResult(ConnectionCase.SEND_PAYLOAD, status) }, TIMEOUT_MESSAGE_MILLIS, TimeUnit.MILLISECONDS)
+                .setResultCallback(
+                    { status -> onResult(ConnectionCase.SEND_PAYLOAD, status) },
+                    TIMEOUT_MESSAGE_MILLIS,
+                    TimeUnit.MILLISECONDS
+                )
 
         }
     }
@@ -375,9 +413,9 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
     protected fun acceptConnection(endpoint: Endpoint) {
         if (googleApiClient!!.isConnected) {
             Nearby.Connections.acceptConnection(googleApiClient, endpoint.id, payloadCallback)
-                    .setResultCallback { status ->
-                        onResult(ConnectionCase.ACCEPT_CONNECTION, status)
-                    }
+                .setResultCallback { status ->
+                    onResult(ConnectionCase.ACCEPT_CONNECTION, status)
+                }
         }
     }
 
@@ -390,28 +428,36 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
         isDiscovering = true
         if (googleApiClient!!.isConnected) {
             Nearby.Connections.startDiscovery(
-                    googleApiClient,
-                    getServiceId(),
-                    object : EndpointDiscoveryCallback() {
-                        override fun onEndpointFound(endpointId: String, info: DiscoveredEndpointInfo) {
-                            Log.d(TAG,
-                                    String.format(
-                                            "onEndpointFound(endpointId=%s, serviceId=%s, endpointName=%s)",
-                                            endpointId, info.serviceId, info.endpointName))
+                googleApiClient,
+                getServiceId(),
+                object : EndpointDiscoveryCallback() {
+                    override fun onEndpointFound(endpointId: String, info: DiscoveredEndpointInfo) {
+                        Log.d(
+                            TAG,
+                            String.format(
+                                "onEndpointFound(endpointId=%s, serviceId=%s, endpointName=%s)",
+                                endpointId, info.serviceId, info.endpointName
+                            )
+                        )
 
-                            if (getServiceId() == info.serviceId) {
-                                val endpoint = Endpoint(endpointId, info.endpointName)
-                                discoveredEndpoints.put(endpointId, endpoint)
-                                onEndpointDiscovered(endpoint)
-                            }
+                        if (getServiceId() == info.serviceId) {
+                            val endpoint = Endpoint(endpointId, info.endpointName)
+                            discoveredEndpoints.put(endpointId, endpoint)
+                            onEndpointDiscovered(endpoint)
                         }
+                    }
 
-                        override fun onEndpointLost(endpointId: String) {
-                            Log.d(TAG, String.format("onEndpointLost(endpointId=%s)", endpointId))
-                        }
-                    },
-                    DiscoveryOptions(STRATEGY))
-                    .setResultCallback({ status -> onResult(ConnectionCase.START_DISCOVERY, status) }, TIMEOUT_DISCOVERY_MILLIS, TimeUnit.MILLISECONDS)
+                    override fun onEndpointLost(endpointId: String) {
+                        Log.d(TAG, String.format("onEndpointLost(endpointId=%s)", endpointId))
+                    }
+                },
+                DiscoveryOptions(STRATEGY)
+            )
+                .setResultCallback(
+                    { status -> onResult(ConnectionCase.START_DISCOVERY, status) },
+                    TIMEOUT_DISCOVERY_MILLIS,
+                    TimeUnit.MILLISECONDS
+                )
         }
     }
 
@@ -434,9 +480,13 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
         // Ask to connect
         if (googleApiClient!!.isConnected) {
             Nearby.Connections.requestConnection(
-                    googleApiClient, getName(), endpoint.id, connectionLifecycleCallback)
-                    .setResultCallback(
-                            { status -> onResult(ConnectionCase.REQUEST_CONNECTION, status) }, TIMEOUT_CONNECT_MILLIS, TimeUnit.MILLISECONDS)
+                googleApiClient, getName(), endpoint.id, connectionLifecycleCallback
+            )
+                .setResultCallback(
+                    { status -> onResult(ConnectionCase.REQUEST_CONNECTION, status) },
+                    TIMEOUT_CONNECT_MILLIS,
+                    TimeUnit.MILLISECONDS
+                )
 
         }
     }
@@ -446,9 +496,12 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
         when (connectionCase) {
             ConnectionCase.ACCEPT_CONNECTION -> {
                 if (!status.isSuccess) {
-                    Log.d(TAG,
-                            String.format(
-                                    "acceptConnection failed. %s", statusToString(status)))
+                    Log.d(
+                        TAG,
+                        String.format(
+                            "acceptConnection failed. %s", statusToString(status)
+                        )
+                    )
                     connectionAccepted = false
                 } else {
                     connectionAccepted = true
@@ -463,10 +516,13 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
                         onTimeOut()
                     } else {
                         isDiscovering = false
-                        Log.d(TAG,
-                                String.format(
-                                        "Discovering failed. Received status %s.",
-                                        statusToString(status)))
+                        Log.d(
+                            TAG,
+                            String.format(
+                                "Discovering failed. Received status %s.",
+                                statusToString(status)
+                            )
+                        )
                         onDiscoveryFailed()
                     }
                     connectionAccepted = false
@@ -480,10 +536,13 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
                         Log.d(TAG, "TimeOut reached")
                         onTimeOut()
                     } else {
-                        Log.d(TAG,
-                                String.format(
-                                        "Advertising failed. Received status %s.",
-                                        statusToString(status)))
+                        Log.d(
+                            TAG,
+                            String.format(
+                                "Advertising failed. Received status %s.",
+                                statusToString(status)
+                            )
+                        )
                         onAdvertisingFailed()
                     }
                     isAdvertising = false
@@ -497,9 +556,12 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
                         Log.d(TAG, "TimeOut reached")
                         onTimeOut()
                     } else {
-                        Log.d(TAG,
-                                String.format(
-                                        "requestConnection failed. %s", statusToString(status)))
+                        Log.d(
+                            TAG,
+                            String.format(
+                                "requestConnection failed. %s", statusToString(status)
+                            )
+                        )
                         onConnectionFailed()
                     }
                     isConnecting = false
@@ -513,9 +575,12 @@ abstract class ConnectionsActivity : AppCompatActivity(), GoogleApiClient.OnConn
                         Log.d(TAG, "TimeOut reached")
                         onTimeOut()
                     } else {
-                        Log.d(TAG, (String.format(
+                        Log.d(
+                            TAG, (String.format(
                                 "sendUnreliablePayload failed. %s",
-                                statusToString(status))))
+                                statusToString(status)
+                            ))
+                        )
                     }
                 }
             }

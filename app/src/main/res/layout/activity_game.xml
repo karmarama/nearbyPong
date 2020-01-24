@@ -1,152 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context="agency.nice.nearbypong.ui.game.GameActivity">
 
-    <data>
+    <agency.nice.nearbypong.widgets.Bar
+        android:id="@+id/bar"
+        android:layout_width="60dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/margin_bar"
+        android:layout_marginEnd="@dimen/margin_bar"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <variable
-            name="player"
-            type="agency.nice.nearbypong.model.Player" />
-    </data>
+    <agency.nice.nearbypong.widgets.Ball
+        android:id="@+id/ball"
+        android:layout_width="@dimen/ball_size"
+        android:layout_height="@dimen/ball_size"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/connecting"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraint"
+    <agency.nice.nearbypong.widgets.RadarView
+        android:id="@+id/circles"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:shadowRadius="20"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <agency.nice.nearbypong.widgets.Bar
-            android:id="@+id/bar"
-            android:layout_width="60dp"
-            android:layout_height="1dp"
-            android:layout_marginEnd="@dimen/margin_bar"
-            android:layout_marginStart="@dimen/margin_bar"
-            android:scaleType="fitXY"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <View
+        android:id="@+id/background"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/green_timeout"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
-        <agency.nice.nearbypong.widgets.Ball
-            android:id="@+id/ball"
-            android:layout_width="@dimen/ball_size"
-            android:layout_height="@dimen/ball_size"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/connecting"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+    <TextView
+        android:id="@+id/connectionFailed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0.1"
+        android:lineSpacingExtra="6sp"
+        android:text="CONNECTION\nFAILED"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
-        <agency.nice.nearbypong.widgets.RadarView
-            android:id="@+id/circles"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:shadowRadius="20"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
 
-        <View
-            android:id="@+id/background"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@color/green_timeout"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/connectionFailed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:letterSpacing="0.1"
-            android:lineSpacingExtra="6sp"
-            android:text="CONNECTION\nFAILED"
-            android:textSize="20sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <TextView
-            android:id="@+id/timeoutText"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:lines="2"
-            android:text="@string/text_timeout"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@color/cyan"
-            android:textSize="@dimen/text_info_large_size"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guideline"
-            tools:layout_height="0dp"
-            tools:layout_width="0dp"
-            tools:visibility="visible" />
+    <TextView
+        android:id="@+id/timeoutText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:lines="2"
+        android:text="@string/text_timeout"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/cyan"
+        android:textSize="@dimen/text_info_large_size"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        tools:layout_height="0dp"
+        tools:layout_width="0dp"
+        tools:visibility="visible" />
 
 
-        <TextView
-            android:id="@+id/connecting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:letterSpacing="0.06"
-            android:lineSpacingExtra="4dp"
-            android:text="@string/game_connecting_text"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textSize="@dimen/text_info_large_size"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guideline"
-            tools:alpha="1"
-            tools:text="@string/game_connecting_text" />
+    <TextView
+        android:id="@+id/connecting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.06"
+        android:lineSpacingExtra="4dp"
+        android:text="@string/game_connecting_text"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_info_large_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        tools:alpha="1"
+        tools:text="@string/game_connecting_text" />
 
+    <agency.nice.nearbypong.widgets.Button
+        android:id="@+id/retry"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:borderSides="left|bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        app:text="@string/button_retry"
+        tools:visibility="visible" />
 
-        <agency.nice.nearbypong.widgets.Button
-            android:id="@+id/retry"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:visibility="gone"
-            app:borderSides="left|bottom"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guideline"
-            app:text="@string/button_retry"
-            tools:visibility="visible" />
+    <TextView
+        android:id="@+id/score"
+        style="@style/Game.Score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@{String.valueOf(player.score)}"
+        android:visibility="gone"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="3"
+        tools:visibility="visible" />
 
-        <TextView
-            android:id="@+id/score"
-            style="@style/Game.Score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@{String.valueOf(player.score)}"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="3"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-    </android.support.constraint.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
