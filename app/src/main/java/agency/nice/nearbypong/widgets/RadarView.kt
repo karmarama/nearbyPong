@@ -5,10 +5,10 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
+import androidx.core.content.ContextCompat
 import java.util.concurrent.TimeUnit
 
 
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
  * Created by fernando.moyano on 22/11/2017.
  */
 class RadarView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private val ANIMATION_MILLIS: Int = 6
@@ -101,9 +101,9 @@ class RadarView @JvmOverloads constructor(
             it.apply {
                 duration = (TimeUnit.SECONDS.toMillis((ANIMATION_MILLIS - 1).toLong()))
                 interpolator = (LinearInterpolator())
-                addUpdateListener({ animation ->
+                addUpdateListener { animation ->
                     drawProgress(animation.animatedValue as Int)
-                })
+                }
                 repeatCount = if (andFinish) 0 else ValueAnimator.INFINITE
                 start()
             }
@@ -114,32 +114,53 @@ class RadarView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas?.drawCircle((deviceWidth / 2).toFloat(), (deviceHeight / 4).toFloat(), initialRadious, getCenterCirclePaint(CircleType.ACCENT))
+        canvas?.drawCircle(
+            (deviceWidth / 2).toFloat(),
+            (deviceHeight / 4).toFloat(),
+            initialRadious,
+            getCenterCirclePaint(CircleType.ACCENT)
+        )
 
         if (!finish) {
             var i = 0
             while (i < 6) {
-                canvas?.drawCircle((deviceWidth / 2).toFloat(), (deviceHeight / 4).toFloat(),
-                        (i / 15f * deviceWidth / 2) + initialRadious, getConcentricCirclesPaint(if (circleCount == i) CircleType.ACCENT else CircleType.REGULAR))
+                canvas?.drawCircle(
+                    (deviceWidth / 2).toFloat(),
+                    (deviceHeight / 4).toFloat(),
+                    (i / 15f * deviceWidth / 2) + initialRadious,
+                    getConcentricCirclesPaint(if (circleCount == i) CircleType.ACCENT else CircleType.REGULAR)
+                )
                 i++
             }
         } else {
             var radiusIndex = ANIMATION_MILLIS - circleCount
-            canvas?.drawCircle((deviceWidth / 2).toFloat(), (deviceHeight / 4).toFloat(), (radiusIndex / 15f * deviceWidth / 2) + initialRadious,
-                    getConcentricCirclesPaint(CircleType.REGULAR))
+            canvas?.drawCircle(
+                (deviceWidth / 2).toFloat(),
+                (deviceHeight / 4).toFloat(),
+                (radiusIndex / 15f * deviceWidth / 2) + initialRadious,
+                getConcentricCirclesPaint(CircleType.REGULAR)
+            )
             var i = 0
             while (i < radiusIndex) {
-                canvas?.drawCircle((deviceWidth / 2).toFloat(), (deviceHeight / 4).toFloat(),
-                        (i / 15f * deviceWidth / 2) + initialRadious, getConcentricCirclesPaint(CircleType.REGULAR))
+                canvas?.drawCircle(
+                    (deviceWidth / 2).toFloat(),
+                    (deviceHeight / 4).toFloat(),
+                    (i / 15f * deviceWidth / 2) + initialRadious,
+                    getConcentricCirclesPaint(CircleType.REGULAR)
+                )
                 i++
             }
             if (circleCount == ANIMATION_MILLIS) {
-                canvas?.drawCircle((deviceWidth / 2).toFloat(), (deviceHeight / 4).toFloat(), initialRadious, getCenterCirclePaint(CircleType.DARK))
+                canvas?.drawCircle(
+                    (deviceWidth / 2).toFloat(),
+                    (deviceHeight / 4).toFloat(),
+                    initialRadious,
+                    getCenterCirclePaint(CircleType.DARK)
+                )
                 onAnimationFinished.onAnimationFinish()
             }
         }
     }
-
 
     interface OnAnimationFinished {
         fun onAnimationFinish()

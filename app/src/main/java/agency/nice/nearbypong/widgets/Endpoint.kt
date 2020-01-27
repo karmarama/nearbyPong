@@ -5,19 +5,13 @@ package agency.nice.nearbypong.widgets
  */
 class Endpoint(val id: String, val name: String) {
 
-    override fun equals(obj: Any?): Boolean {
+    override fun equals(obj: Any?) =
         if (obj != null && obj is Endpoint) {
             val other = obj as Endpoint?
-            return id == other!!.id
-        }
-        return false
-    }
+            id == other!!.id
+        } else false
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    override fun hashCode() = id.hashCode()
 
-    override fun toString(): String {
-        return String.format("Endpoint{id=%s, name=%s}", id, name)
-    }
+    override fun toString() = String.format("Endpoint{id=%s, name=%s}", id, name)
 }

@@ -2,11 +2,7 @@ package agency.nice.nearbypong.widgets
 
 import agency.nice.nearbypong.R
 import agency.nice.nearbypong.model.BallParameters
-import agency.nice.nearbypong.ui.core.Constants
 import android.content.Context
-import android.support.animation.DynamicAnimation
-import android.support.animation.FlingAnimation
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +11,9 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.FlingAnimation
 import kotlinx.android.synthetic.main.view_ball.view.*
 import java.util.*
 
@@ -24,33 +23,35 @@ import java.util.*
  */
 
 class Ball @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
-    var topLimit: Int = 0
     var bottomLimit: Int = 0
     var sideLimit: Int = 0
-    var side: Int = Constants.SIDE_LEFT
-    var velocity = 1500f
-    var friction = 0.1f
+    var side: Int = SIDE_LEFT
+    private var velocity = 1500f
+    private var friction = 0.1f
+    private var topLimit: Int = 0
     private var velocityY = velocity
     private var velocityX = velocity
     lateinit var listener: BallListener
 
     private val flingAnimationX = FlingAnimation(this, DynamicAnimation.X).setFriction(friction)
-    val flingAnimationY = FlingAnimation(this, DynamicAnimation.Y).setFriction(friction)
+    private val flingAnimationY = FlingAnimation(this, DynamicAnimation.Y).setFriction(friction)
 
     init {
         LayoutInflater.from(context)
-                .inflate(R.layout.view_ball, this, true)
+            .inflate(R.layout.view_ball, this, true)
         setFlingListener()
     }
 
     fun rotate() {
         flingAnimationX.cancel()
         flingAnimationY.cancel()
-        val rotate = RotateAnimation(0f, 360f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                0.5f)
+        val rotate = RotateAnimation(
+            0f, 360f,
+            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
 
         rotate.duration = 1000
         rotate.interpolator = LinearInterpolator()
@@ -79,19 +80,19 @@ class Ball @JvmOverloads constructor(
         flingAnimationX.addUpdateListener { _, value, _ ->
 
             velocityX = velocity
-            if (side == Constants.SIDE_LEFT && value <= -1 * width / 2) {
+            if (side == SIDE_LEFT && value <= -1 * width / 2) {
                 listener.goal()
             }
 
-            if (side == Constants.SIDE_LEFT && value > sideLimit + width / 2) {
+            if (side == SIDE_LEFT && value > sideLimit + width / 2) {
                 listener.sendBallData(this.x, this.y, velocityX, velocityY)
             }
 
-            if (side == Constants.SIDE_RIGHT && value <= -1 * width / 2) {
+            if (side == SIDE_RIGHT && value <= -1 * width / 2) {
                 listener.sendBallData(this.x, this.y, velocityX, velocityY)
             }
 
-            if (side == Constants.SIDE_RIGHT && value + width / 2 > sideLimit) {
+            if (side == SIDE_RIGHT && value + width / 2 > sideLimit) {
                 listener.goal()
             }
         }
@@ -108,10 +109,10 @@ class Ball @JvmOverloads constructor(
         if (!flingAnimationX.isRunning) {
             start()
         } else {
-            flingAnimationX.setStartVelocity(if (side == Constants.SIDE_LEFT) velocityX else -1 * velocityX).start()
+            flingAnimationX.setStartVelocity(if (side == SIDE_LEFT) velocityX else -1 * velocityX)
+                .start()
         }
     }
-
 
     fun crazyBounce() {
         insideFilled.animate().alpha(0f).start()
@@ -148,10 +149,11 @@ class Ball @JvmOverloads constructor(
 
     fun moveBallTo(ballParameters: BallParameters) {
         visibility = View.VISIBLE
-        x = if (side == Constants.SIDE_LEFT) sideLimit.toFloat() - width else 5f
+        x = if (side == SIDE_LEFT) sideLimit.toFloat() - width else 5f
         y = ballParameters.posY
         velocityY = ballParameters.velocityY
-        velocityX = if (side == Constants.SIDE_LEFT) -1 * ballParameters.velocityX else ballParameters.velocityX
+        velocityX =
+            if (side == SIDE_LEFT) -1 * ballParameters.velocityX else ballParameters.velocityX
         flingAnimationX.setStartVelocity(velocityX).start()
         flingAnimationY.setStartVelocity(velocityY).start()
     }
@@ -166,15 +168,15 @@ class Ball @JvmOverloads constructor(
         flingAnimationY.cancel()
     }
 
-    fun start() {
-        velocityX = if (side == Constants.SIDE_RIGHT) -1 * velocity else velocity
+    private fun start() {
+        velocityX = if (side == SIDE_RIGHT) -1 * velocity else velocity
         velocityY = if (Random().nextBoolean()) velocity else -1 * velocity
         flingAnimationX.setStartVelocity(velocityX).start()
         flingAnimationY.setStartVelocity(velocityY).start()
     }
 
     fun colourDarkBlue() {
-        var color = ContextCompat.getColor(context, R.color.blue)
+        val color = ContextCompat.getColor(context, R.color.blue)
         inside.setColorFilter(color)
         insideFilled.setColorFilter(color)
         outside.setColorFilter(color)
@@ -189,9 +191,10 @@ class Ball @JvmOverloads constructor(
     }
 
     fun changeDrawable(side: Int) {
-        var color = ContextCompat.getColor(context, R.color.orange)
-        if (side == Constants.SIDE_LEFT) {
-            color = ContextCompat.getColor(context, R.color.cyan)
+        val color = if (side == SIDE_LEFT) {
+            ContextCompat.getColor(context, R.color.cyan)
+        } else {
+            ContextCompat.getColor(context, R.color.orange)
         }
         inside.setColorFilter(color)
         insideFilled.setColorFilter(color)
@@ -204,7 +207,6 @@ class Ball @JvmOverloads constructor(
             repeatMode = Animation.REVERSE
             startAnimation(this)
         }
-
     }
 
     fun changeAlphaToMax() {

@@ -1,12 +1,9 @@
 package agency.nice.nearbypong.model
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-/**
- * Created by ferranribell on 11/09/2017.
- */
 @Entity(tableName = "player")
 data class Player(
         @PrimaryKey

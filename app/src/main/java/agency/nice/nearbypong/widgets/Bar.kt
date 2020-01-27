@@ -1,27 +1,25 @@
 package agency.nice.nearbypong.widgets
 
 import agency.nice.nearbypong.R
-import agency.nice.nearbypong.ui.core.Constants
+import agency.nice.nearbypong.model.MAX_GOALS
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
-import android.widget.ImageView
 
 
 /**
  * Created by ferranribell on 07/09/2017.
  */
 
+const val SIDE_LEFT: Int = 0
+const val SIDE_RIGHT: Int = 1
+
 class Bar @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : ImageView(context, attrs, defStyleAttr) {
-    companion object {
-        var SIDE_LEFT: Int = 0
-        var SIDE_RIGHT: Int = 1
-    }
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : androidx.appcompat.widget.AppCompatImageView(context, attrs, defStyleAttr) {
 
     var bottomLimit: Int = 0
     var side: Int = SIDE_LEFT
@@ -44,47 +42,41 @@ class Bar @JvmOverloads constructor(
         }
     }
 
-    fun setDarkColour(){
+    fun setDarkColour() {
         setImageResource(R.drawable.rectangle_black)
     }
 
+    fun getTheLeft() = x - width / 2
 
-    fun getTheLeft(): Float {
-        return x - width / 2
-    }
+    fun getTheRight() = x + width / 2
 
-    fun getTheRight(): Float {
-        return x + width / 2
-    }
+    fun getTheTop() = y
 
-    fun getTheTop(): Float {
-        return y
-    }
-
-    fun getTheBottom(): Float {
-        return y + height
-    }
+    fun getTheBottom() = y + height
 
     fun setHeight(size: Int) {
-        var params = layoutParams
+        val params = layoutParams
         params.height = size
         layoutParams = params
     }
 
     fun changeBarSize(difference: Int) {
         if (difference < 0) {
-            var barHeight = resources.getDimensionPixelOffset(R.dimen.bar_height)
-            val porcentage: Float = (Constants.MAX_GOALS + difference).toFloat() / Constants.MAX_GOALS.toFloat()
-            height = (barHeight * porcentage).toInt()
+            val barHeight = resources.getDimensionPixelOffset(R.dimen.bar_height)
+            val percentage: Float = (MAX_GOALS + difference).toFloat() / MAX_GOALS.toFloat()
+            height = (barHeight * percentage).toInt()
         }
     }
 
     fun blink() {
-        val blinkanimation = AlphaAnimation(1f, 0.5f) // Change alpha from fully visible to invisible
-        blinkanimation.duration = 100 // duration - half a second
-        blinkanimation.interpolator = LinearInterpolator() // do not alter animation rate
-        blinkanimation.repeatCount = 1 // Repeat animation infinitely
-        blinkanimation.repeatMode = Animation.REVERSE
-        startAnimation(blinkanimation)
+        val blinkAnimation =
+            AlphaAnimation(1f, 0.5f) // Change alpha from fully visible to invisible
+        blinkAnimation.apply {
+            duration = 100 // duration - half a second
+            interpolator = LinearInterpolator() // do not alter animation rate
+            repeatCount = 1 // Repeat animation infinitely
+            repeatMode = Animation.REVERSE
+        }
+        startAnimation(blinkAnimation)
     }
 }

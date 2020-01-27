@@ -1,18 +1,21 @@
-package agency.nice.nearbypong.ui.game
+package agency.nice.nearbypong.ui.home
 
 import agency.nice.nearbypong.repositories.GameRepository
 import agency.nice.nearbypong.ui.core.BasePresenter
+import agency.nice.nearbypong.ui.game.HomeMvp
 import agency.nice.nearbypong.utils.Utils
 import android.util.Log
 
 /**
  * Created by fernando.moyano on 08/09/2017.
  */
-class HomePresenter(var gameRepository: GameRepository) : BasePresenter<HomeMvp.View>(), HomeMvp.Presenter {
+class HomePresenter(private val gameRepository: GameRepository) : BasePresenter<HomeMvp.View>(),
+    HomeMvp.Presenter {
 
-    val TAG = "HomePresenter"
+    private val TAG = "HomePresenter"
     override fun loadGames() {
-        disposables.add(gameRepository.getAll()
+        disposables.add(
+            gameRepository.getAll()
                 .compose(Utils.applySchedulersFlowable())
                 .subscribe({ gamesList ->
                     if (gamesList.isEmpty()) {
@@ -23,8 +26,7 @@ class HomePresenter(var gameRepository: GameRepository) : BasePresenter<HomeMvp.
                 }, { throwable ->
                     Log.e(TAG, "Error retrieving the games", throwable)
                     view!!.hideGamesList()
-                }))
+                })
+        )
     }
-
-
 }

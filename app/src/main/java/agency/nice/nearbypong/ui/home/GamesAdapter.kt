@@ -3,16 +3,17 @@ package agency.nice.nearbypong.ui.home
 import agency.nice.nearbypong.R
 import agency.nice.nearbypong.model.Game
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_game.view.*
 
 /**
  * Created by ferranribell on 17/10/2017.
  */
-class GamesAdapter(var context: Context, var list: List<Game>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GamesAdapter(var context: Context, var list: List<Game>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TYPE_ITEM = 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -44,5 +45,4 @@ class GamesAdapter(var context: Context, var list: List<Game>) : RecyclerView.Ad
     }
 
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
 }
