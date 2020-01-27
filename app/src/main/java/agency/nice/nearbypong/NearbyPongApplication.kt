@@ -15,6 +15,8 @@ class NearbyPongApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        database = Room.databaseBuilder(applicationContext, NearbyPongDatabase::class.java, "NearbyPongDatabase").build()
+        database = Room.databaseBuilder(applicationContext, NearbyPongDatabase::class.java, "NearbyPongDatabase")
+            .allowMainThreadQueries()
+            .build()
     }
 }
