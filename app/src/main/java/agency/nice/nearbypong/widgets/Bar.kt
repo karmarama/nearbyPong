@@ -1,7 +1,7 @@
 package agency.nice.nearbypong.widgets
 
 import agency.nice.nearbypong.R
-import agency.nice.nearbypong.ui.core.MAX_GOALS
+import agency.nice.nearbypong.model.MAX_GOALS
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -14,8 +14,8 @@ import android.view.animation.LinearInterpolator
  * Created by ferranribell on 07/09/2017.
  */
 
-val SIDE_LEFT: Int = 0
-val SIDE_RIGHT: Int = 1
+const val SIDE_LEFT: Int = 0
+const val SIDE_RIGHT: Int = 1
 
 class Bar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

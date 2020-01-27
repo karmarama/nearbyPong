@@ -31,30 +31,33 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by fernando.moyano on 07/09/2017.
  */
+
+private val REQUIRED_PERMISSIONS = arrayOf(
+    Manifest.permission.BLUETOOTH,
+    Manifest.permission.BLUETOOTH_ADMIN,
+    Manifest.permission.ACCESS_WIFI_STATE,
+    Manifest.permission.CHANGE_WIFI_STATE,
+    Manifest.permission.ACCESS_COARSE_LOCATION,
+    Manifest.permission.READ_PHONE_STATE
+)
+private const val REQUEST_CODE_REQUIRED_PERMISSIONS = 1
+private const val TIMEOUT_STATUS = 15
+private const val TIMEOUT_CONNECT_MILLIS: Long = 30000
+private const val TIMEOUT_MESSAGE_MILLIS: Long = 20000
+private const val TIMEOUT_ADVERTISING_MILLIS: Long = 25000
+private const val TIMEOUT_DISCOVERY_MILLIS: Long = 25000
+const val SECOND_MILLIS: Long = 1000
+private val STRATEGY = Strategy.P2P_STAR
+
 abstract class ConnectionsActivity : AppCompatActivity(),
     GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     val TAG = "NearbyText"
     private val SERVICE_ID = "com.google.location.nearby.apps.walkietalkie.automatic.SERVICE_ID"
-    private lateinit var state: State
+    private var state: State
     private lateinit var name: String
-    private val REQUIRED_PERMISSIONS = arrayOf(
-        Manifest.permission.BLUETOOTH,
-        Manifest.permission.BLUETOOTH_ADMIN,
-        Manifest.permission.ACCESS_WIFI_STATE,
-        Manifest.permission.CHANGE_WIFI_STATE,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.READ_PHONE_STATE
-    )
-    private val REQUEST_CODE_REQUIRED_PERMISSIONS = 1
-    private val TIMEOUT_STATUS = 15
-    private val TIMEOUT_CONNECT_MILLIS: Long = 30000
-    private val TIMEOUT_MESSAGE_MILLIS: Long = 20000
-    private val TIMEOUT_ADVERTISING_MILLIS: Long = 25000
-    private val TIMEOUT_DISCOVERY_MILLIS: Long = 25000
-    protected val SECOND_MILLIS: Long = 1000
 
-    private val STRATEGY = Strategy.P2P_STAR
+
     private val discoveredEndpoints = HashMap<String, Endpoint>()
     private val pendingConnections = HashMap<String, Endpoint>()
     private val establishedConnections = HashMap<String, Endpoint>()
@@ -64,9 +67,7 @@ abstract class ConnectionsActivity : AppCompatActivity(),
     private var isAdvertising = false
     private var connectionAccepted = false
     private var onPauseReached = false
-
-
-    private lateinit var countDownTimer: CountDownTimer
+    private var countDownTimer: CountDownTimer
 
     /**
      * States that the UI goes through.
@@ -167,7 +168,7 @@ abstract class ConnectionsActivity : AppCompatActivity(),
 
         override fun onDisconnected(endpointId: String) {
             if (!establishedConnections.containsKey(endpointId)) {
-                Log.d(TAG, "Unexpected disconnection from endpoint " + endpointId)
+                Log.d(TAG, "Unexpected disconnection from endpoint $endpointId")
                 return
             }
             disconnectedFromEndpoint(establishedConnections[endpointId])

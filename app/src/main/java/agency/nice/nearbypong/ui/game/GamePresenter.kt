@@ -12,7 +12,7 @@ import android.util.Log
  * Created by fernando.moyano on 08/09/2017.
  */
 
-val TAG = "GamePresenter"
+const val TAG = "GamePresenter"
 
 class GamePresenter(var gameRepository: GameRepository, var playerRepository: PlayerRepository) :
     BasePresenter<GameMvp.View>(), GameMvp.Presenter {
@@ -41,6 +41,5 @@ class GamePresenter(var gameRepository: GameRepository, var playerRepository: Pl
                 Log.e(TAG, "Error saving Game", throwable)
                 view!!.navigateToResultScreen(winner)
             })
-
     }
 }

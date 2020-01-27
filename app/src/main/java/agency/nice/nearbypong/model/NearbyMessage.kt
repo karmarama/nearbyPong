@@ -11,4 +11,3 @@ data class NearbyMessage(
     val position: BallParameters = BallParameters(),
     val goal: Goal = Goal()
 )
-

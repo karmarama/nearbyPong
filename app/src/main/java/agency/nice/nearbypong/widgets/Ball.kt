@@ -2,8 +2,6 @@ package agency.nice.nearbypong.widgets
 
 import agency.nice.nearbypong.R
 import agency.nice.nearbypong.model.BallParameters
-import agency.nice.nearbypong.ui.core.SIDE_LEFT
-import agency.nice.nearbypong.ui.core.SIDE_RIGHT
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -27,18 +25,18 @@ import java.util.*
 class Ball @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
-    var topLimit: Int = 0
     var bottomLimit: Int = 0
     var sideLimit: Int = 0
     var side: Int = SIDE_LEFT
-    var velocity = 1500f
-    var friction = 0.1f
+    private var velocity = 1500f
+    private var friction = 0.1f
+    private var topLimit: Int = 0
     private var velocityY = velocity
     private var velocityX = velocity
     lateinit var listener: BallListener
 
     private val flingAnimationX = FlingAnimation(this, DynamicAnimation.X).setFriction(friction)
-    val flingAnimationY = FlingAnimation(this, DynamicAnimation.Y).setFriction(friction)
+    private val flingAnimationY = FlingAnimation(this, DynamicAnimation.Y).setFriction(friction)
 
     init {
         LayoutInflater.from(context)
@@ -116,7 +114,6 @@ class Ball @JvmOverloads constructor(
         }
     }
 
-
     fun crazyBounce() {
         insideFilled.animate().alpha(0f).start()
         velocityX = velocity + Random().nextFloat() * if (Random().nextBoolean()) 100f else -100f
@@ -171,7 +168,7 @@ class Ball @JvmOverloads constructor(
         flingAnimationY.cancel()
     }
 
-    fun start() {
+    private fun start() {
         velocityX = if (side == SIDE_RIGHT) -1 * velocity else velocity
         velocityY = if (Random().nextBoolean()) velocity else -1 * velocity
         flingAnimationX.setStartVelocity(velocityX).start()
@@ -179,7 +176,7 @@ class Ball @JvmOverloads constructor(
     }
 
     fun colourDarkBlue() {
-        var color = ContextCompat.getColor(context, R.color.blue)
+        val color = ContextCompat.getColor(context, R.color.blue)
         inside.setColorFilter(color)
         insideFilled.setColorFilter(color)
         outside.setColorFilter(color)
@@ -194,9 +191,10 @@ class Ball @JvmOverloads constructor(
     }
 
     fun changeDrawable(side: Int) {
-        var color = ContextCompat.getColor(context, R.color.orange)
-        if (side == SIDE_LEFT) {
-            color = ContextCompat.getColor(context, R.color.cyan)
+        val color = if (side == SIDE_LEFT) {
+            ContextCompat.getColor(context, R.color.cyan)
+        } else {
+            ContextCompat.getColor(context, R.color.orange)
         }
         inside.setColorFilter(color)
         insideFilled.setColorFilter(color)
@@ -209,7 +207,6 @@ class Ball @JvmOverloads constructor(
             repeatMode = Animation.REVERSE
             startAnimation(this)
         }
-
     }
 
     fun changeAlphaToMax() {

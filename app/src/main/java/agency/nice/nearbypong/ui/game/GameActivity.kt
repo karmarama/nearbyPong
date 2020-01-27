@@ -9,7 +9,6 @@ import agency.nice.nearbypong.helpers.trackEvent
 import agency.nice.nearbypong.model.*
 import agency.nice.nearbypong.repositories.GameRepository
 import agency.nice.nearbypong.repositories.PlayerRepository
-import agency.nice.nearbypong.ui.core.Constants
 import agency.nice.nearbypong.ui.result.getResultIntent
 import agency.nice.nearbypong.utils.getUserId
 import agency.nice.nearbypong.utils.screenHeight
@@ -42,7 +41,6 @@ import java.nio.charset.Charset
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
-
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -87,7 +85,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
         )
         presenter.attachView(this)
 
-        currentPlayer = Player("", Constants.SIDE_LEFT, 0)
+        currentPlayer = Player("", SIDE_LEFT, 0)
         initialBallConstraint = ConstraintSet()
         initialBallConstraint.clone(constraint)
         bounceSound = MediaPlayer.create(this, R.raw.beep_ping)
@@ -146,18 +144,16 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     }
 
     private fun setPlayers(idOponent: String) {
-        var mySide =
-            if (getUserId().compareTo(idOponent) > 0) Constants.SIDE_LEFT else Constants.SIDE_RIGHT
+        val mySide =
+            if (getUserId() > idOponent) SIDE_LEFT else SIDE_RIGHT
         currentPlayer = Player(getDeviceId(), mySide, 0)
-        var oponentPlayer = Player(idOponent, 1 - mySide, 0)
+        val opponentPlayer = Player(idOponent, 1 - mySide, 0)
 
         players.add(currentPlayer)
-        players.add(oponentPlayer)
-
+        players.add(opponentPlayer)
 
         presenter.saveOrUpdatePlayer(currentPlayer)
-        presenter.saveOrUpdatePlayer(oponentPlayer)
-
+        presenter.saveOrUpdatePlayer(opponentPlayer)
         player = currentPlayer
     }
 
@@ -174,9 +170,9 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     }
 
     private fun initBar() {
-        bar.setImageResource(if (currentPlayer.side == Constants.SIDE_RIGHT) R.drawable.rectangle_orange else R.drawable.rectangle_green)
+        bar.setImageResource(if (currentPlayer.side == SIDE_RIGHT) R.drawable.rectangle_orange else R.drawable.rectangle_green)
         bar.side = currentPlayer.side
-        if (bar.side == Constants.SIDE_RIGHT) {
+        if (bar.side == SIDE_RIGHT) {
 
             val barConstraint = ConstraintSet()
             barConstraint.clone(constraint)
@@ -219,9 +215,8 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
         var intersects = false
         val radio = ball.width / 2
 
-        if (
-            ((currentPlayer.side == Constants.SIDE_LEFT && ball.x - radio <= rect.getTheRight())
-                    || (currentPlayer.side == Constants.SIDE_RIGHT && ball.x + radio >= rect.getTheLeft()))
+        if (((currentPlayer.side == SIDE_LEFT && ball.x - radio <= rect.getTheRight())
+                    || (currentPlayer.side == SIDE_RIGHT && ball.x + radio >= rect.getTheLeft()))
             && ball.y - radio >= rect.getTheTop() - radio
             && ball.y + radio <= rect.getTheBottom() + radio
         ) {
@@ -240,14 +235,14 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
             sideLimit = screenWidth
             listener = object : Ball.BallListener {
                 override fun goal() {
-                    Log.d("BALL", Constants.GOAL)
-                    if (!getConnectedEndpoints().isEmpty()) {
+                    Log.d("BALL", GOAL)
+                    if (getConnectedEndpoints().isNotEmpty()) {
                         hasHitBar = false
                         ball.stop()
                         sendMsg(
                             NearbyMessage(
                                 goal = Goal(
-                                    Constants.GOAL,
+                                    GOAL,
                                     currentPlayer.id,
                                     currentPlayer.score
                                 )
@@ -277,7 +272,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
                     Log.d("BALL", "Send view_ball data:$posX-$posY")
                     ball.stop()
                     hasHitBar = false
-                    if (!getConnectedEndpoints().isEmpty()) {
+                    if (getConnectedEndpoints().isNotEmpty()) {
                         sendMsg(
                             NearbyMessage(
                                 position = BallParameters(
@@ -285,7 +280,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
                                     posY,
                                     velocityX,
                                     velocityY,
-                                    Constants.SENT
+                                    SENT
                                 )
                             )
                         )
@@ -305,7 +300,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     }
 
     private fun resetBall() {
-        if (currentPlayer.side == Constants.SIDE_LEFT) {
+        if (currentPlayer.side == SIDE_LEFT) {
             ball.x = bar.x + bar.width / 2 + ball.width / 2
         } else {
             ball.x = bar.x - bar.width / 2 - ball.width / 2
@@ -327,7 +322,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
                     palId = state.id
                     setPlayers(palId)
                     createOpponent(palId)
-                    sendMsg(NearbyMessage(confirmation = Constants.CONFIRMATION_VALUE))
+                    sendMsg(NearbyMessage(confirmation = CONFIRMATION_VALUE))
                 }
                 state.confirmation.isNotEmpty() -> {
                     trackEvent(this, FRIEND_FOUND, getUserId())
@@ -360,7 +355,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     }
 
     private fun saveGame(winner: Boolean) {
-        var game = Game()
+        val game = Game()
         game.apply {
             playerOneId = getUserId()
             playerTwoId = players[1].id
@@ -372,8 +367,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     }
 
     override fun addPlayers(opponent: Player) {
-        var mySide =
-            if (getUserId().compareTo(opponent.id) > 0) Constants.SIDE_LEFT else Constants.SIDE_RIGHT
+        val mySide = if (getUserId() > opponent.id) SIDE_LEFT else SIDE_RIGHT
         currentPlayer = Player(getDeviceId(), mySide, 0)
         players.add(currentPlayer)
         players.add(opponent)
@@ -383,29 +377,26 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     }
 
     override fun createOpponent(opponentId: String) {
-        var mySide =
-            if (getUserId().compareTo(opponentId) > 0) Constants.SIDE_LEFT else Constants.SIDE_RIGHT
+        val mySide = if (getUserId() > opponentId) SIDE_LEFT else SIDE_RIGHT
         currentPlayer = Player(getDeviceId(), mySide, 0)
-        var opponentPlayer = Player(opponentId, 1 - mySide, 0)
+        val opponentPlayer = Player(opponentId, 1 - mySide, 0)
 
         addPlayers(opponentPlayer)
     }
 
     private fun initScore() {
         score.visibility = View.VISIBLE
-        var color = R.color.cyan
-        if (currentPlayer.side == Constants.SIDE_RIGHT) {
-            color = R.color.orange
-        }
+        val color = if (currentPlayer.side == SIDE_RIGHT) {
+            R.color.orange
+        } else R.color.cyan
         score.setTextColor(ContextCompat.getColor(this, color))
     }
 
     private fun initScoreWeakReference(scoreWR: WeakReference<TextView>) {
         score.visibility = View.VISIBLE
-        var color = R.color.cyan
-        if (currentPlayer.side == Constants.SIDE_RIGHT) {
-            color = R.color.orange
-        }
+        val color = if (currentPlayer.side == SIDE_RIGHT) {
+            R.color.orange
+        } else R.color.cyan
         scoreWR.get()!!.setTextColor(ContextCompat.getColor(this, color))
     }
 
@@ -418,21 +409,18 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
             .setStartDelay(500)
             .setInterpolator(AccelerateDecelerateInterpolator())
             .setDuration(500)
-            .translationX((if (currentPlayer.side == Constants.SIDE_LEFT) -1 else 1) * (screenWidth / 2 - score.width * 2).toFloat())
+            .translationX((if (currentPlayer.side == SIDE_LEFT) -1 else 1) * (screenWidth / 2 - score.width * 2).toFloat())
             .translationY((screenHeight / 2 - score.height * 2).toFloat())
             .scaleX(3f)
             .scaleY(3f)
             .setListener(object : Animator.AnimatorListener {
                 override fun onAnimationRepeat(p0: Animator?) {
-                    // Nothing
                 }
 
                 override fun onAnimationStart(p0: Animator?) {
-                    // Nothing
                 }
 
                 override fun onAnimationCancel(p0: Animator?) {
-                    // Nothing
                 }
 
                 override fun onAnimationEnd(p0: Animator?) {
@@ -452,14 +440,13 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
                     bar.changeBarSize(currentPlayer.score - friendScore)
                     TransitionManager.beginDelayedTransition(constraint)
                 }
-
             })
             .start()
         setFriendGoal(friendScore)
     }
 
     private fun checkGoals() {
-        if (currentPlayer.score >= Constants.MAX_GOALS) {
+        if (currentPlayer.score >= MAX_GOALS) {
             sendMsg(NearbyMessage(end = getString(R.string.game_loser_flag)))
             saveGame(WINNER)
         }
@@ -536,7 +523,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
                 )
             }
 
-            if (currentPlayer.side == Constants.SIDE_LEFT) {
+            if (currentPlayer.side == SIDE_LEFT) {
                 ball.visibility = View.VISIBLE
                 ballConstraint.apply {
                     connect(ball.id, ConstraintSet.LEFT, bar.id, ConstraintSet.RIGHT, 0)
@@ -546,7 +533,6 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
             } else {
                 ball.x = (-1 * ball.width).toFloat()
             }
-
             TransitionManager.beginDelayedTransition(constraint)
         }
 
@@ -562,7 +548,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     private fun showTimeoutAnimation(show: Boolean) {
         circles.visibility = if (show) View.GONE else View.VISIBLE
         timeoutText.visibility = if (show) View.VISIBLE else View.GONE
-        var resizeAnimation = ResizeAnimation().apply {
+        val resizeAnimation = ResizeAnimation().apply {
             //  initTimeoutView()
             background.visibility = View.VISIBLE
             init(background, screenHeight * 2, screenWidth, show)
@@ -618,17 +604,14 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
         scoreWR: WeakReference<TextView>,
         constraintWR: WeakReference<ConstraintLayout>
     ) {
-
-
         object : Thread() {
-
             override fun run() {
                 try {
                     while (!isInterrupted) {
-                        Thread.sleep(SECOND_MILLIS)
+                        sleep(SECOND_MILLIS)
                         runOnUiThread {
                             if (Calendar.getInstance().get(Calendar.SECOND) % 2 == 0) {
-                                setNormalScreen(ballWR, barWR, scoreWR, constraintWR)
+                                setNormalScreen(ballWR, barWR, scoreWR)
                             } else {
                                 setDarkScreen(ballWR, barWR, scoreWR, constraintWR)
                             }
@@ -636,12 +619,9 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
                     }
                 } catch (e: InterruptedException) {
                 }
-
             }
         }.start()
-
     }
-
 
     private fun setDarkScreen(
         ballWR: WeakReference<Ball>,
@@ -652,7 +632,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
         constraintWR.get()!!.setBackgroundColor(
             ContextCompat.getColor(
                 this,
-                if (currentPlayer.side == Constants.SIDE_RIGHT) R.color.cyan else R.color.orange
+                if (currentPlayer.side == SIDE_RIGHT) R.color.cyan else R.color.orange
             )
         )
         ballWR.get()!!.colourDarkBlue()
@@ -663,8 +643,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     private fun setNormalScreen(
         ballWR: WeakReference<Ball>,
         barWR: WeakReference<Bar>,
-        scoreWR: WeakReference<TextView>,
-        constraintWR: WeakReference<ConstraintLayout>
+        scoreWR: WeakReference<TextView>
     ) {
         constraint.setBackgroundColor(
             ContextCompat.getColor(
@@ -673,7 +652,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
             )
         )
         ballWR.get()!!.changeDrawable(currentPlayer.side)
-        barWR.get()!!.setImageResource(if (currentPlayer.side == Constants.SIDE_RIGHT) R.drawable.rectangle_orange else R.drawable.rectangle_green)
+        barWR.get()!!.setImageResource(if (currentPlayer.side == SIDE_RIGHT) R.drawable.rectangle_orange else R.drawable.rectangle_green)
         initScoreWeakReference(scoreWR)
     }
 
@@ -685,7 +664,7 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
 
 
     override fun onEndpointDisconnected(endpoint: Endpoint?) {
-        Log.d(TAG, getString(R.string.log_disconnected, endpoint!!.name))
+        Log.d(TAG, getString(R.string.log_disconnected, endpoint?.name))
         setState(State.SEARCHING)
         endGame()
         showTimeoutAnimation(!SHOW)
@@ -694,10 +673,9 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     }
 
     override fun onEndpointConnected(endpoint: Endpoint?) {
-        Log.d(TAG, getString(R.string.log_connected, endpoint!!.name))
+        Log.d(TAG, getString(R.string.log_connected, endpoint?.name))
         setState(State.CONNECTED)
         showSettingFieldText(SHOW)
-
         sendMsg(NearbyMessage(getUserId()))
     }
 
@@ -721,7 +699,6 @@ class GameActivity : ConnectionsActivity(), GameMvp.View, OnAnimationFinished {
     }
 
     internal class CollisionTimerTask(private val callback: OnCollision) : TimerTask() {
-
         override fun run() {
             callback.hit()
         }
